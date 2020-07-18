@@ -48,7 +48,7 @@ services:
     stdin_open: true
     tty: true
     volumes:
-      - ~/W205:/w205
+      - ~/w205:/w205
     expose:
       - "8888"
     ports:
@@ -66,7 +66,7 @@ services:
     image: midsw205/presto:0.0.1
     hostname: presto
     volumes:
-      - ~/W205:/w205
+      - ~/w205:/w205
     expose:
       - "8080"
     environment:
@@ -79,7 +79,7 @@ services:
     stdin_open: true
     tty: true
     volumes:
-      - ~/W205:/w205
+      - ~/w205:/w205
     expose:
       - "5000"
     ports:
