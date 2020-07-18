@@ -10,10 +10,12 @@ producer = KafkaProducer(bootstrap_servers='kafka:29092')
 assets = [
     {
         'name': 'stock_a',
+        'asset_type' : 'stock', 
         'price': 20
     },
     {
         'name': 'bond_a',
+        'asset_type' : 'bond', 
         'price': 10
     }
 ]
@@ -22,12 +24,11 @@ assets = [
 account = [
     {
         'user_id': 1, 
-        'item': 'cash', 
+        'asset_type': 'cash', 
         'value' : 100, 
         'date': '2020-07-18'
     }
 ]
-
 
 
 def log_to_kafka(topic, event):
@@ -50,46 +51,3 @@ def make_a_depoist():
     return_price_event = {'event_type': 'return_price'}
     log_to_kafka('events', return_price_event)
     return jsonify(assets)
-
-#buy or sell asset 
-@app.route("/buy_asset", methods = ['POST'])
-def make_a_depoist():
-    make_deposit_event = {'event_type': 'buy_asset'}
-    log_to_kafka('events', purchase_sword_event)
-    return "Sword Purchased!\n"
-
-@app.route("/sell_asset")
-def make_a_depoist():
-    make_deposit_event = {'event_type': 'make_deposit'}
-    log_to_kafka('events', purchase_sword_event)
-    return "Sword Purchased!\n"
-
-#deposit or withdraw money 
-@app.route("/withdraw")
-def make_a_depoist():
-    make_deposit_event = {'event_type': 'make_deposit'}
-    log_to_kafka('events', purchase_sword_event)
-    return "Sword Purchased!\n"
-
-@app.route("/deposit")
-def make_a_depoist():
-    make_deposit_event = {'event_type': 'make_deposit'}
-    log_to_kafka('events', purchase_sword_event)
-    return "Sword Purchased!\n"
-
-#open or delete an account
-@app.route("/open_account")
-def open_an_account():
-    open_account_event = {'event_type': 'open_account',
-                            'description': 'Welcome to nest of eggs!'}
-    log_to_kafka('events', open_an_account)
-    return "Account Opened!\n"
-
-
-@app.route("/delete_account")
-def open_an_account():
-    open_account_event = {'event_type': 'open_account',
-                            'description': 'Welcome to nest of eggs!'}
-    log_to_kafka('events', open_an_account)
-    return "Account Opened!\n"
-
