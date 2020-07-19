@@ -26,8 +26,8 @@ docker-compose exec mids \
 #docker-compose exec mids curl http://localhost:5000/return_price
 #docker-compose exec mids curl http://localhost:5000/return_price/stock_a
 
-pip install httpie
-http POST :5000/open_account/ author="Tim Peters"
+#pip install httpie
+#http POST :5000/open_account/ author="Tim Peters"
 
 #Kafka
 #docker-compose exec mids kafkacat -C -b kafka:29092 -t events -o beginning

@@ -8,6 +8,12 @@
 - Each has metadata characterstic of such events (i.e., sword type, guild name,
   etc)
 
+Sources: 
+-https://blog.miguelgrinberg.com/post/designing-a-restful-api-with-python-and-flask
+-https://marshmallow.readthedocs.io/en/stable/examples.html#todo-api-flask-peewee
+
+-https://towardsdatascience.com/simulating-stock-prices-in-python-using-geometric-brownian-motion-8dfd6e8c6b18
+-https://datascienceplus.com/how-to-apply-monte-carlo-simulation-to-forecast-stock-prices-using-python/
 
 ## Tasks
 
