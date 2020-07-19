@@ -14,6 +14,8 @@ Sources:
 
 -https://towardsdatascience.com/simulating-stock-prices-in-python-using-geometric-brownian-motion-8dfd6e8c6b18
 -https://datascienceplus.com/how-to-apply-monte-carlo-simulation-to-forecast-stock-prices-using-python/
+-https://jtsulliv.github.io/stock-movement/
+-https://blog.quantinsti.com/random-walk/
 
 ## Tasks
 
