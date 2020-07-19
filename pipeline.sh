@@ -19,10 +19,16 @@ docker-compose exec mids \
   env FLASK_APP=/w205/Project-3-w205-JHR/banking_game_api.py \
   flask run --host 0.0.0.0
   
-#CHANGE ENVIRONMENT PATH WHEN TURNING IN PROJECT 
+#CHANGE ENVIRONMENT PATH WHEN TURNING IN PROJECT ?? 
   
 #Test Flask app   
 #docker-compose exec mids curl http://localhost:5000/
+#docker-compose exec mids curl http://localhost:5000/return_price
+#docker-compose exec mids curl http://localhost:5000/return_price/stock_a
 
+pip install httpie
+http POST :5000/open_account/ author="Tim Peters"
+
+#Kafka
 #docker-compose exec mids kafkacat -C -b kafka:29092 -t events -o beginning
 

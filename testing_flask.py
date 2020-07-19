@@ -1,4 +1,10 @@
 
+@app.route("/delete_account")
+def delete_account():
+    delete_account_event = {'event_type': 'delete_account',
+                            'description': 'Deleting account!'}
+    log_to_kafka('events', delete_account_event)
+    return "Account Deleted!\n"
 
 
 #buy or sell asset 
@@ -26,20 +32,4 @@ def make_a_depoist():
     make_deposit_event = {'event_type': 'make_deposit'}
     log_to_kafka('events', purchase_sword_event)
     return "Sword Purchased!\n"
-
-#open or delete an account
-@app.route("/open_account")
-def open_an_account():
-    open_account_event = {'event_type': 'open_account',
-                            'description': 'Welcome to nest of eggs!'}
-    log_to_kafka('events', open_an_account)
-    return "Account Opened!\n"
-
-
-@app.route("/delete_account")
-def open_an_account():
-    open_account_event = {'event_type': 'open_account',
-                            'description': 'Welcome to nest of eggs!'}
-    log_to_kafka('events', open_an_account)
-    return "Account Opened!\n"
 
