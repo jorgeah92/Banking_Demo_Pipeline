@@ -29,23 +29,41 @@ docker-compose exec mids \
 #docker-compose exec mids curl http://localhost:5000/
 #docker-compose exec mids curl http://localhost:5000/return_price
 #docker-compose exec mids curl http://localhost:5000/return_asset_price/stock_a
-#docker-compose exec mids curl http://localhost:5000/return_account_info/praju
+#docker-compose exec mids curl http://localhost:5000/return_account_info/tpeters
 
 #http POST :5000/open_account/ full_name="Tim Peters" user_id="tpeters"
 #http POST :5000/delete_account/ full_name="Tim Peters" user_id="tpeters"
 
-#http POST :5000/deposit/ user_id="praju" amount=200
-#http POST :5000/withdraw/ user_id="praju" amount=50
+#http POST :5000/deposit/ user_id="tpeters" amount=200
+#http POST :5000/withdraw/ user_id="tpeters" amount=50
 
-#http POST :5000/buy_asset/ user_id="praju" number_of=2 asset_name=stock_a
-#http POST :5000/sell_asset/ user_id="praju" number_of=2 asset_name=stock_a
+#http POST :5000/buy_asset/ user_id="tpeters" number_of=2 asset_name=stock_a
+#http POST :5000/sell_asset/ user_id="tpeters" number_of=1 asset_name=stock_a
 
 
 #Kafka
-#docker-compose exec mids kafkacat -C -b kafka:29092 -t events -o beginning
+docker-compose exec mids kafkacat -C -b kafka:29092 -t events -o beginning
+
+#Spark job
+docker-compose exec spark spark-submit /w205/Project-3-w205-JHR/writestream_events.py
+
+#Hadoop
+docker-compose exec cloudera hadoop fs -ls /tmp/
 
 #Apache Bench
+while true;do docker-compose exec mids ab -n 10 -H "Host: user1.comcast.com" http://localhost:5000/return_price; sleep 10; done
 
+# while true;do docker-compose exec mids ab -n 10 -H "Host: user1.comcast.com" http POST :5000/open_account/ full_name="Tim Peters" user_id="tpeters"; sleep 10; done
+
+# while true;do docker-compose exec mids ab -n 5 -H "Host: user1.comcast.com" http POST :5000/delete_account/ full_name="Tim Peters" user_id="tpeters"; sleep 10; done
+
+# while true;do docker-compose exec mids ab -n 5 -H "Host: user1.comcast.com" http POST :5000/deposit/ user_id="tpeters" amount=200; sleep 10; done
+
+# while true;do docker-compose exec mids ab -n 5 -H "Host: user1.comcast.com" http POST :5000/buy_asset/ user_id="tpeters" number_of=2 asset_name=stock_a; sleep 10; done
+
+#presto
+presto:default> show tables;
+presto:default> describe <table name>;
 
 #docker-compose down 
 
