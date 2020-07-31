@@ -36,7 +36,7 @@ assets = [
 path = "./Project-3-w205-JHR/tmp/"
 
 # Create blank accounts file
-with open(path + "accounts.txt", "w") as file:
+with open(path + "accounts.json", "w") as file:
     json.dump({}, file)
 
 print("")
@@ -81,7 +81,7 @@ class AssetValue:
     
     def update_account_value(self, user_id): 
         self.update_asset_price()
-        with open(path + "accounts.txt") as file:
+        with open(path + "accounts.json") as file:
             accounts = json.load(file)
         original_account = accounts[user_id]
         new_account = original_account.copy()
@@ -92,7 +92,7 @@ class AssetValue:
         new_account['original_value'] = round(sum([i['original_value'] for i in new_account['transactions']]),2)
         new_account['total_value'] = round(sum([i['current_value'] for i in new_account['transactions']]),2)
         accounts[user_id] = new_account
-        with open(path + "accounts.txt", "w") as file:
+        with open(path + "accounts.json", "w") as file:
                 json.dump(accounts, file)
         return new_account
     
@@ -163,7 +163,7 @@ def get_asset_price(asset_name):
 # Return information on an account
 @app.route('/return_account_info/<user_id>', methods=['GET'])
 def get_account_info(user_id):
-    with open(path + "accounts.txt") as file:
+    with open(path + "accounts.json") as file:
             accounts = json.load(file)
     if user_id in accounts: 
         return_account_event = {'event_type': 'return_account_information',
@@ -183,7 +183,7 @@ def open_account():
     elif not Schema(json_data).validate_account_schema(): 
         return jsonify({"message": "Must provide user_name and user_id."}), 400
     else:
-        with open(path + "accounts.txt") as file:
+        with open(path + "accounts.json") as file:
             accounts = json.load(file)
         if json_data['user_id'] in accounts.keys():
             return "Account already exists! Pick a unique username.\n"
@@ -198,7 +198,7 @@ def open_account():
                 }
 
             accounts.update(user_data)
-            with open(path + "accounts.txt", "w") as file:
+            with open(path + "accounts.json", "w") as file:
                 json.dump(accounts, file)
         
             open_account_event = {'event_type': 'open_account',
@@ -216,7 +216,7 @@ def delete_account():
     elif not Schema(json_data).validate_account_schema(): 
         return jsonify({"message": "Must provide user_name and user_id."}), 400
     else:
-        with open(path + "accounts.txt") as file:
+        with open(path + "accounts.json") as file:
             accounts = json.load(file)
         if json_data['user_id'] not in accounts.keys():
             return jsonify({"message": "Must provide existing user_name and user_id."}), 400
@@ -224,7 +224,7 @@ def delete_account():
             if json_data["user_id"] == accounts[json_data["user_id"]]["user_id"] and \
                 json_data["full_name"] == accounts[json_data["user_id"]]["full_name"]:
                 del accounts[json_data['user_id']]
-                with open(path + "accounts.txt", "w") as file:
+                with open(path + "accounts.json", "w") as file:
                     json.dump(accounts, file)
                 
             
@@ -254,7 +254,7 @@ def make_a_deposit():
     elif not Schema(json_data).validate_deposit_schema(): 
         return jsonify({"message": "Must provide valid user_id and amount."}), 400
     else:
-        with open(path + "accounts.txt") as file:
+        with open(path + "accounts.json") as file:
             accounts = json.load(file)
         if json_data['user_id'] not in accounts.keys():
             return "Account doesn't exist!\n"
@@ -269,7 +269,7 @@ def make_a_deposit():
                         k['current_value']+= add_cash
                         k['transaction_date'] = datetime.today().strftime("%Y-%m-%d")
                 
-                        with open(path + "accounts.txt", "w") as file:
+                        with open(path + "accounts.json", "w") as file:
                             json.dump(accounts, file)
                         return log_deposit(json_data['user_id'])
             else: 
@@ -281,7 +281,7 @@ def make_a_deposit():
                             'current_value' : add_cash
                             })
                 
-                with open(path + "accounts.txt", "w") as file:
+                with open(path + "accounts.json", "w") as file:
                     json.dump(accounts, file)
                 
                 return log_deposit(json_data['user_id'])
@@ -303,7 +303,7 @@ def make_a_withdrawal():
     elif not Schema(json_data).validate_deposit_schema(): 
         return jsonify({"message": "Must provide valid user_id and amount."}), 400
     else:
-        with open(path + "accounts.txt") as file:
+        with open(path + "accounts.json") as file:
             accounts = json.load(file)
         if json_data['user_id'] not in accounts.keys():
             return "Account doesn't exist!\n"
@@ -321,7 +321,7 @@ def make_a_withdrawal():
                             k['current_value']-= withdraw_cash
                             k['transaction_date'] = datetime.today().strftime("%Y-%m-%d")
 
-                            with open(path + "accounts.txt", "w") as file:
+                            with open(path + "accounts.json", "w") as file:
                                 json.dump(accounts, file)
                             return log_withdrawal(json_data['user_id'])
             else: 
@@ -338,7 +338,7 @@ def buy_an_asset():
     elif not Schema(json_data).validate_asset_schema(): 
         return jsonify({"message": "Must provide valid user_id and amount; make sure account has cash."}), 400
     else:
-        with open(path + "accounts.txt") as file:
+        with open(path + "accounts.json") as file:
             accounts = json.load(file)
         if json_data['user_id'] not in accounts.keys():
             return "Account doesn't exist!\n"
@@ -366,7 +366,7 @@ def buy_an_asset():
                         buy_asset_event = {'event_type': 'buy_asset'}
                         log_to_kafka('events', buy_asset_event)
                         
-                        with open(path + "accounts.txt", "w") as file:
+                        with open(path + "accounts.json", "w") as file:
                                 json.dump(accounts, file)    
                         AssetValue().update_account_value(json_data['user_id'])
                         return 'Asset purchased!\n'
@@ -384,7 +384,7 @@ def sell_an_asset():
     elif json_data['asset_name'] not in [i['asset_name'] for i in assets]: 
         return "Asset doesn't exist!\n"
     else:
-        with open(path + "accounts.txt") as file:
+        with open(path + "accounts.json") as file:
             accounts = json.load(file)
         if json_data['user_id'] not in accounts.keys():
             return "Account doesn't exist!\n"
@@ -425,6 +425,6 @@ def sell_an_asset():
             sell_asset_event = {'event_type': 'sell_asset'}
             log_to_kafka('events', sell_asset_event)
             
-            with open(path + "accounts.txt", "w") as file:
+            with open(path + "accounts.json", "w") as file:
                                 json.dump(accounts, file)
             return 'Asset sold!\n'
