@@ -10,31 +10,35 @@ from pyspark.sql.types import StructType, StructField, StringType, IntegerType
 def return_event_schema():
     """
     root
+    |-- raw_event: string(nullable = true)
+    |-- timestamp: string(nullable = true)
     |-- Accept: string (nullable = true)
     |-- Host: string (nullable = true)
     |-- User-Agent: string (nullable = true)
     |-- event_type: string (nullable = true)
-    |-- timestamp: string(nullable = true)
     |-- description: string (nullable = true)
     
     """
     return StructType([
+        StructField("raw_event", StringType(), True),
+        StructField("timestamp",StringType(), True),
         StructField("Accept", StringType(), True),
         StructField("Host", StringType(), True),
-        StructField("User-Agent", StringType(), True),
+        StructField("User_Agent", StringType(), True),
         StructField("event_type", StringType(), True),
         StructField("description",StringType(), True),
-        StructField("timestamp",StringType(), True),
+        
     ])
 
 def account_event_schema():
     """
     root
+    |-- raw_event: string(nullable = true)
+    |-- timestamp: string(nullable = true)
     |-- Accept: string (nullable = true)
     |-- Host: string (nullable = true)
     |-- User-Agent: string (nullable = true)
     |-- event_type: string (nullable = true)
-    |-- timestamp: string (nullable = true)
     |-- description: string (nullable = true)
     |-- Content-Length: IntegerType (nullable = true)
     |-- Accept-Encoding: string (nullable = true)
@@ -43,26 +47,29 @@ def account_event_schema():
        
     """
     return StructType([
+        StructField("raw_event", StringType(), True),
+        StructField("timestamp",StringType(), True),
         StructField("Accept", StringType(), True),
         StructField("Host", StringType(), True),
-        StructField("User-Agent", StringType(), True),
+        StructField("User_Agent", StringType(), True),
         StructField("event_type", StringType(), True),
         StructField("description",StringType(), True),
-        StructField("Content-Length", IntegerType(), True),
-        StructField("Accept-Encoding", StringType(), True),
+        StructField("Content_Length", IntegerType(), True),
+        StructField("Accept_Encoding", StringType(), True),
         StructField("Connection", StringType(), True),
-        StructField("Content-Type",StringType(), True),
-        StructField("timestamp",StringType(), True),
+        StructField("Content_Type",StringType(), True),
+        
     ])
 
 def asset_transactions_schema():
     """
     root
+    |-- raw_event: string(nullable = true)
+    |-- timestamp: string(nullable = true)
     |-- Accept: string (nullable = true)
     |-- Host: string (nullable = true)
     |-- User-Agent: string (nullable = true)
     |-- event_type: string (nullable = true)
-    |-- timestamp: string (nullable = true)
     |-- description: string (nullable = true)
     |-- Content-Length: IntegerType (nullable = true)
     |-- Accept-Encoding: string (nullable = true)
@@ -71,26 +78,28 @@ def asset_transactions_schema():
        
     """
     return StructType([
+        StructField("raw_event", StringType(), True),
+        StructField("timestamp",StringType(), True),
         StructField("Accept", StringType(), True),
         StructField("Host", StringType(), True),
-        StructField("User-Agent", StringType(), True),
+        StructField("User_Agent", StringType(), True),
         StructField("event_type", StringType(), True),
         StructField("description",StringType(), True),
-        StructField("Content-Length", IntegerType(), True),
-        StructField("Accept-Encoding", StringType(), True),
+        StructField("Content_Length", IntegerType(), True),
+        StructField("Accept_Encoding", StringType(), True),
         StructField("Connection", StringType(), True),
-        StructField("Content-Type",StringType(), True),
-        StructField("timestamp",StringType(), True),
+        StructField("Content_Type",StringType(), True)
     ])
 
 def cash_transactions_schema():
     """
-    root
+   root
+    |-- raw_event: string(nullable = true)
+    |-- timestamp: string(nullable = true)
     |-- Accept: string (nullable = true)
     |-- Host: string (nullable = true)
     |-- User-Agent: string (nullable = true)
     |-- event_type: string (nullable = true)
-    |-- timestamp: string (nullable = true)
     |-- description: string (nullable = true)
     |-- Content-Length: IntegerType (nullable = true)
     |-- Accept-Encoding: string (nullable = true)
@@ -99,16 +108,17 @@ def cash_transactions_schema():
        
     """
     return StructType([
+        StructField("raw_event", StringType(), True),
+        StructField("timestamp",StringType(), True),
         StructField("Accept", StringType(), True),
         StructField("Host", StringType(), True),
-        StructField("User-Agent", StringType(), True),
+        StructField("User_Agent", StringType(), True),
         StructField("event_type", StringType(), True),
         StructField("description",StringType(), True),
-        StructField("Content-Length", IntegerType(), True),
-        StructField("Accept-Encoding", StringType(), True),
+        StructField("Content_Length", IntegerType(), True),
+        StructField("Accept_Encoding", StringType(), True),
         StructField("Connection", StringType(), True),
-        StructField("Content-Type",StringType(), True),
-        StructField("timestamp",StringType(), True),
+        StructField("Content_Type",StringType(), True)
     ])
 
 @udf('boolean')
@@ -181,8 +191,6 @@ def main():
         .trigger(processingTime="10 seconds") \
         .start()
 
-    sink1.awaitTermination()
-    
     account_status = raw_events \
         .filter(is_account_event(raw_events.value.cast('string'))) \
         .select(raw_events.value.cast('string').alias('raw_event'),
@@ -201,9 +209,7 @@ def main():
         .option("path", "/tmp/account_status") \
         .trigger(processingTime="10 seconds") \
         .start()
-
-    sink2.awaitTermination()
-    
+       
     asset_transactions = raw_events \
         .filter(is_asset_transactions(raw_events.value.cast('string'))) \
         .select(raw_events.value.cast('string').alias('raw_event'),
@@ -223,8 +229,7 @@ def main():
         .trigger(processingTime="10 seconds") \
         .start()
 
-    sink3.awaitTermination()
-    
+      
     cash_transactions = raw_events \
         .filter(is_cash_transactions(raw_events.value.cast('string'))) \
         .select(raw_events.value.cast('string').alias('raw_event'),
@@ -244,7 +249,12 @@ def main():
         .trigger(processingTime="10 seconds") \
         .start()
 
+   
+    sink1.awaitTermination()
+    sink2.awaitTermination()
+    sink3.awaitTermination()
     sink4.awaitTermination()
+    
 
 
 
