@@ -14,7 +14,7 @@ def return_event_schema():
     |-- Host: string (nullable = true)
     |-- User-Agent: string (nullable = true)
     |-- event_type: string (nullable = true)
-    |-- timestamp: TimestampType(nullable = true)
+    |-- timestamp: string(nullable = true)
     |-- description: string (nullable = true)
     
     """
@@ -24,7 +24,7 @@ def return_event_schema():
         StructField("User-Agent", StringType(), True),
         StructField("event_type", StringType(), True),
         StructField("description",StringType(), True),
-        StructField("timestamp", StringType(), True),
+        StructField("timestamp",StringType(), True),
     ])
 
 def account_event_schema():
@@ -50,10 +50,9 @@ def account_event_schema():
         StructField("description",StringType(), True),
         StructField("Content-Length", IntegerType(), True),
         StructField("Accept-Encoding", StringType(), True),
-        StructField("User-Agent", StringType(), True),
         StructField("Connection", StringType(), True),
         StructField("Content-Type",StringType(), True),
-        StructField("timestamp", StringType(), True),
+        StructField("timestamp",StringType(), True),
     ])
 
 def asset_transactions_schema():
@@ -79,10 +78,9 @@ def asset_transactions_schema():
         StructField("description",StringType(), True),
         StructField("Content-Length", IntegerType(), True),
         StructField("Accept-Encoding", StringType(), True),
-        StructField("User-Agent", StringType(), True),
         StructField("Connection", StringType(), True),
         StructField("Content-Type",StringType(), True),
-        StructField("timestamp", StringType(), True),
+        StructField("timestamp",StringType(), True),
     ])
 
 def cash_transactions_schema():
@@ -108,10 +106,9 @@ def cash_transactions_schema():
         StructField("description",StringType(), True),
         StructField("Content-Length", IntegerType(), True),
         StructField("Accept-Encoding", StringType(), True),
-        StructField("User-Agent", StringType(), True),
         StructField("Connection", StringType(), True),
         StructField("Content-Type",StringType(), True),
-        StructField("timestamp", StringType(), True),
+        StructField("timestamp",StringType(), True),
     ])
 
 @udf('boolean')
@@ -191,7 +188,7 @@ def main():
         .select(raw_events.value.cast('string').alias('raw_event'),
                 raw_events.timestamp.cast('string'),
                 from_json(raw_events.value.cast('string'),
-                          return_event_schema()).alias('json')) \
+                          account_event_schema()).alias('json')) \
         .select('raw_event', 'timestamp', 'json.*')
 
 #     account_status.printSchema()

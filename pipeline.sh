@@ -61,9 +61,80 @@ while true;do docker-compose exec mids ab -n 10 -H "Host: user1.comcast.com" htt
 
 # while true;do docker-compose exec mids ab -n 5 -H "Host: user1.comcast.com" http POST :5000/buy_asset/ user_id="tpeters" number_of=2 asset_name=stock_a; sleep 10; done
 
+#Hive
+docker-compose exec cloudera hive
+
+#Presto
+create external table if not exists default.asset_prices (
+   
+    Host string,
+    User_Agent string,
+    event_type string,
+    Accept string,
+    description string,
+    timestamp string,
+    raw_event string
+  )
+  stored as parquet 
+  location '/tmp/return_asset_price'
+  tblproperties ("parquet.compress"="SNAPPY");
+  
+create external table if not exists default.account_status (
+    Accept string,
+    Host string,
+    User_Agent string,
+    event_type string,
+    description string,
+    Content-Length string,
+    Accept-Encoding string,
+    Connection string,
+    Content-Type string,
+    timestamp string,
+    raw_event string
+  )
+  stored as parquet 
+  location '/tmp/account_status'
+  tblproperties ("parquet.compress"="SNAPPY");
+  
+create external table if not exists default.asset_transactions(
+    Accept string,
+    Host string,
+    User_Agent string,
+    event_type string,
+    description string,
+    Content-Length string,
+    Accept-Encoding string,
+    Connection string,
+    Content-Type string,
+    timestamp string,
+    raw_event string
+  )
+  stored as parquet 
+  location '/tmp/asset_transactions'
+  tblproperties ("parquet.compress"="SNAPPY");
+
+create external table if not exists default.cash_transactions(
+    Accept string,
+    Host string,
+    User_Agent string,
+    event_type string,
+    description string,
+    Content-Length string,
+    Accept-Encoding string,
+    Connection string,
+    Content-Type string,
+    timestamp string,
+    raw_event string
+  )
+  stored as parquet 
+  location '/tmp/cash_transactions'
+  tblproperties ("parquet.compress"="SNAPPY");
+
+
+  
 #presto
-presto:default> show tables;
-presto:default> describe <table name>;
+# show tables;
+# describe <table name>;
 
 #docker-compose down 
 
