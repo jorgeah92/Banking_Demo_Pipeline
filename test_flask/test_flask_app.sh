@@ -33,9 +33,11 @@
 #Sell Asset 
 #docker-compose exec mids curl -i -H "Content-Type: application/json" -X POST -d '{"user_id": "tpeters", "number_of": "2", "asset_name": "stock_a"}' http://localhost:5000/sell_asset/
 
+docker-compose exec mids ab -n 1 -p /Project-3-w205-JHR/untitled.txt -T application/json http://localhost:5000/open_account/
+
 docker-compose exec mids ab -n 1 -p /Project-3-w205-JHR/test_flask/json_txt_files/create_account.txt -T application/json http://localhost:5000/open_account/
 
-docker-compose exec mids ab -p /W205/Project-3-w205-JHR/test_flask/json_txt_files/create_account.txt -T application/json -c 10 -n 10 http://localhost:5000/open_account
+docker-compose exec mids ab -p /w205/Project-3-w205-JHR/test_flask/json_txt_files/create_account.txt -T application/json -c 10 -n 10 http://localhost:5000/open_account
 
 
 W205/Project-3-w205-JHR/test_flask/json_txt_files/create_account.txt
