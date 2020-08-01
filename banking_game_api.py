@@ -196,15 +196,12 @@ def open_account():
                 'as_of' : str(date.today()),
                 'transactions': []}
                 }
-
             accounts.update(user_data)
             with open(path + "accounts.json", "w") as file:
                 json.dump(accounts, file)
-        
             open_account_event = {'event_type': 'open_account',
                           'description': 'Opening account: ' + json_data['user_id']}
             log_to_kafka('events', open_account_event)
-        
             return "Account Opened!\n"
 
 # Delete an account    
@@ -226,8 +223,6 @@ def delete_account():
                 del accounts[json_data['user_id']]
                 with open(path + "accounts.json", "w") as file:
                     json.dump(accounts, file)
-                
-            
                 delete_account_event = {'event_type': 'delete_account',
                                 'description': 'Deleting account: ' + json_data["user_id"]}
                 log_to_kafka('events', delete_account_event)
