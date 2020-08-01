@@ -15,6 +15,9 @@ docker-compose up -d
      --if-not-exists \
      --zookeeper zookeeper:32181
      
+#Add folder
+mkdir tmp
+     
 #Run Flask 
 docker-compose exec mids \
   env FLASK_APP=/w205/Project-3-w205-JHR/banking_game_api.py \
@@ -32,6 +35,27 @@ docker-compose exec mids \
 #docker-compose exec mids curl http://localhost:5000/return_account_info/tpeters
 
 #http POST :5000/open_account/ full_name="Tim Peters" user_id="tpeters"
+
+docker-compose exec mids curl -i -H "Content-Type: application/json" -X POST -d '{"user_id": "tpeters", "full_name": "Tim Peters"}' http://localhost:5000/open_account/
+
+docker-compose exec mids curl -i -H "Content-Type: application/json" -X POST -d '{"user_id": "tpeters", "full_name": "Tim Peters"}' http://localhost:5000/delete_account/
+
+
+ab -p post_loc.txt -T application/json -H 'Authorization: Token abcd1234' -c 1 -n 1 http://localhost:5000/open_account/
+
+
+docker-compose exec mids ab -n 1 -H "Content-Type: application/json" -d '{"user_id": "tpeters", "full_name": "Tim Peters"}' http://localhost:5000/open_account/
+
+docker-compose exec mids ab -p /w205/Project-3-w205-JHR/create_account.txt -T application/json -c 1 -n 1 http://localhost:5000/open_account/
+
+docker-compose exec mids ab -n 1 -T application/json -H "'full_name' : 'Preethi', 'user_id' : 'praju'" http://localhost:5000/open_account
+
+while true;do docker-compose exec mids curl -i -H "Content-Type: application/json" -X POST -d '{"user_id": "tpeters", "full_name": "Tim Peters"}' http://localhost:5000/open_account/; sleep 1; done
+
+while true;do docker-compose exec mids curl -i -H "Content-Type: application/json" -X POST -d '{"user_id": "tpeters", "full_name": "Tim Peters"}' http://localhost:5000/open_account/; sleep 1; done
+
+while true;do docker-compose exec mids ab -n 1 -p /w205/Project-3-w205-JHR/create_account.txt -T application/json http://localhost:5000/open_account/; sleep 10; done
+
 #http POST :5000/delete_account/ full_name="Tim Peters" user_id="tpeters"
 
 #http POST :5000/deposit/ user_id="tpeters" amount=200
