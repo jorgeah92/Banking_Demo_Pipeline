@@ -97,7 +97,6 @@ class AssetValue:
         return new_account
     
 
-
 ##### SCHEMAS #####
 # Checks if schemas present
 class Schema: 
@@ -169,7 +168,6 @@ def get_account_info(user_id):
         return_account_event = {'event_type': 'return_account_information',
                                 'description': 'return account into for ' + user_id}
         log_to_kafka('events', return_account_event)
-        
         return jsonify(AssetValue().update_account_value(user_id))
     else: 
         return jsonify({"message": "User ID not found"}), 400
@@ -226,7 +224,6 @@ def delete_account():
                 delete_account_event = {'event_type': 'delete_account',
                                 'description': 'Deleting account: ' + json_data["user_id"]}
                 log_to_kafka('events', delete_account_event)
-        
                 return "Account Deleted!\n"
             else:
                 return "Provided information does not match records!\n"
@@ -275,10 +272,8 @@ def make_a_deposit():
                             'transaction_date': datetime.today().strftime("%Y-%m-%d"),
                             'current_value' : add_cash
                             })
-                
                 with open(path + "accounts.json", "w") as file:
                     json.dump(accounts, file)
-                
                 return log_deposit(json_data['user_id'])
 
 
@@ -331,7 +326,7 @@ def buy_an_asset():
     if not json_data:
         return jsonify({"message": "No input data provided"}), 400
     elif not Schema(json_data).validate_asset_schema(): 
-        return jsonify({"message": "Must provide valid user_id and amount; make sure account has cash."}), 400
+        return jsonify({"message": "Must provide valid user_id and amount; also make sure account has cash."}), 400
     else:
         with open(path + "accounts.json") as file:
             accounts = json.load(file)
@@ -357,10 +352,8 @@ def buy_an_asset():
                             'transaction_date': datetime.today().strftime("%Y-%m-%d"),
                             'current_value' : asset_total_value
                             })
-                        
                         buy_asset_event = {'event_type': 'buy_asset'}
                         log_to_kafka('events', buy_asset_event)
-                        
                         with open(path + "accounts.json", "w") as file:
                                 json.dump(accounts, file)    
                         AssetValue().update_account_value(json_data['user_id'])
@@ -415,11 +408,8 @@ def sell_an_asset():
                     i['original_value'] += new_current_value
                     i['number_of'] += new_current_value
             transactions.append(combine_asset)
-            
-            
             sell_asset_event = {'event_type': 'sell_asset'}
             log_to_kafka('events', sell_asset_event)
-            
             with open(path + "accounts.json", "w") as file:
                                 json.dump(accounts, file)
             return 'Asset sold!\n'

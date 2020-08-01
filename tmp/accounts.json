@@ -1,5 +1,1 @@
-<<<<<<< HEAD
-{"tpeters": {"user_id": "tpeters", "as_of": "2020-08-01", "transactions": [], "total_value": 0, "full_name": "Tim Peters", "original_value": 0}}
-=======
-{}
->>>>>>> 093209121a35540ba9df05f6faf4eac18f971972
+{"tpeters": {"user_id": "tpeters", "original_value": 5760.0, "full_name": "Tim Peters", "total_value": 5760.01, "transactions": [{"asset_name": "cash", "original_value": 5590.4000000000015, "number_of": 5590.4000000000015, "transaction_date": "2020-08-01", "current_value": 5590.4, "asset_type": "cash"}, {"asset_name": "stock_a", "original_value": 127.20000000000002, "number_of": 24, "transaction_date": "2020-08-01", "current_value": 127.21, "asset_type": "stock"}, {"number_of": 8, "original_value": 42.4, "asset_name": "stock_a", "transaction_date": "2020-08-01", "current_value": 42.4, "asset_type": "stock"}], "as_of": "2020-08-01"}}

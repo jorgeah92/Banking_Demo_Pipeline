@@ -33,10 +33,36 @@ docker-compose exec cloudera hadoop fs -ls /tmp/
 docker-compose exec cloudera hadoop fs -ls /tmp/return_asset_prices
 
 #Apache Bench
-while true;do docker-compose exec mids ab -n 10 -H "Host: user1.comcast.com" http://localhost:5000/return_price; sleep 10; done
 
-while true;do docker-compose exec mids ab -n 10 -H "Host: user1.comcast.com" http://localhost:5000/return_asset_price/stock_a; sleep 10; done
+#default
+while true; do docker-compose exec mids ab -n 10 -T application/json  -H "Host: user1.comcast.com" http://localhost:5000/; sleep 1; done
 
+#return all asset prices
+while true; do docker-compose exec mids ab -n 10 -T application/json  -H "Host: user1.comcast.com" http://localhost:5000/return_price; sleep 1; done
+
+#return specific asset price
+while true; do docker-compose exec mids ab -n 10 -T application/json  -H "Host: user1.comcast.com" http://localhost:5000/return_price/stock_a; sleep 1; done
+
+#return account info 
+while true; do docker-compose exec mids ab -n 10 -T application/json  -H "Host: user1.comcast.com" http://localhost:5000/return_account_info/tpeters; sleep 1; done
+
+#create account
+while true; do docker-compose exec mids ab -n 1 -p /w205/Project-3-w205-JHR/test_flask/json_txt_files/create_account.txt -T application/json  -H "Host: user1.comcast.com" http://localhost:5000/open_account/; sleep 1; done
+
+#delete account 
+while true; do docker-compose exec mids ab -n 1 -p /w205/Project-3-w205-JHR/test_flask/json_txt_files/delete_account.txt -T application/json  -H "Host: user1.comcast.com" http://localhost:5000/delete_account/; sleep 1; done
+
+#deposit account
+while true; do docker-compose exec mids ab -n 1 -p /w205/Project-3-w205-JHR/test_flask/json_txt_files/deposit_amount.txt -T application/json  -H "Host: user1.comcast.com" http://localhost:5000/deposit/; sleep 1; done
+
+#withdraw account
+while true; do docker-compose exec mids ab -n 1 -p /w205/Project-3-w205-JHR/test_flask/json_txt_files/withdraw_amount.txt -T application/json  -H "Host: user1.comcast.com" http://localhost:5000/withdraw/; sleep 1; done
+
+#buy asset
+while true; do docker-compose exec mids ab -n 1 -p /w205/Project-3-w205-JHR/test_flask/json_txt_files/buy_asset.txt -T application/json  -H "Host: user1.comcast.com" http://localhost:5000/buy_asset/; sleep 1; done
+
+#sell asset
+while true; do docker-compose exec mids ab -n 1 -p /w205/Project-3-w205-JHR/test_flask/json_txt_files/sell_asset.txt -T application/json  -H "Host: user1.comcast.com" http://localhost:5000/sell_asset/; sleep 1; done
 
 #Hive
 docker-compose exec cloudera hive
