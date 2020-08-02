@@ -41,7 +41,7 @@ while true; do docker-compose exec mids ab -n 10 -T application/json  -H "Host: 
 while true; do docker-compose exec mids ab -n 10 -T application/json  -H "Host: user1.comcast.com" http://localhost:5000/return_price; sleep 1; done
 
 #return specific asset price
-while true; do docker-compose exec mids ab -n 10 -T application/json  -H "Host: user1.comcast.com" http://localhost:5000/return_price/stock_a; sleep 1; done
+while true; do docker-compose exec mids ab -n 10 -T application/json -H "Host: user1.comcast.com" http://localhost:5000/return_asset_price/stock_a; sleep 1; done
 
 #return account info 
 while true; do docker-compose exec mids ab -n 10 -T application/json  -H "Host: user1.comcast.com" http://localhost:5000/return_account_info/tpeters; sleep 1; done
@@ -137,5 +137,6 @@ create external table if not exists default.cash_transactions(
 #presto
 # show tables;
 # describe <table name>;
+#select count(*) from asset_prices;
 
 #docker-compose down 
