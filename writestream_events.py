@@ -10,18 +10,17 @@ from pyspark.sql.types import StructType, StructField, StringType, IntegerType
 def return_event_schema():
     """
     root
-    |-- raw_event: string(nullable = true)
-    |-- timestamp: string(nullable = true)
+   
+    
     |-- Accept: string (nullable = true)
     |-- Host: string (nullable = true)
     |-- User-Agent: string (nullable = true)
     |-- event_type: string (nullable = true)
     |-- description: string (nullable = true)
+    |-- timestamp: string(nullable = true)
     
     """
     return StructType([
-        StructField("raw_event", StringType(), True),
-        StructField("timestamp",StringType(), True),
         StructField("Accept", StringType(), True),
         StructField("Host", StringType(), True),
         StructField("User_Agent", StringType(), True),
@@ -33,8 +32,8 @@ def return_event_schema():
 def account_event_schema():
     """
     root
-    |-- raw_event: string(nullable = true)
-    |-- timestamp: string(nullable = true)
+    
+   
     |-- Accept: string (nullable = true)
     |-- Host: string (nullable = true)
     |-- User-Agent: string (nullable = true)
@@ -44,11 +43,10 @@ def account_event_schema():
     |-- Accept-Encoding: string (nullable = true)
     |-- Connection: string (nullable = true)
     |-- Content-Type: string(nullable = true)
+    |-- timestamp: string(nullable = true)
        
     """
     return StructType([
-        StructField("raw_event", StringType(), True),
-        StructField("timestamp",StringType(), True),
         StructField("Accept", StringType(), True),
         StructField("Host", StringType(), True),
         StructField("User_Agent", StringType(), True),
@@ -64,8 +62,7 @@ def account_event_schema():
 def asset_transactions_schema():
     """
     root
-    |-- raw_event: string(nullable = true)
-    |-- timestamp: string(nullable = true)
+   
     |-- Accept: string (nullable = true)
     |-- Host: string (nullable = true)
     |-- User-Agent: string (nullable = true)
@@ -75,11 +72,10 @@ def asset_transactions_schema():
     |-- Accept-Encoding: string (nullable = true)
     |-- Connection: string (nullable = true)
     |-- Content-Type: string(nullable = true)
+    |-- timestamp: string(nullable = true)
        
     """
     return StructType([
-        StructField("raw_event", StringType(), True),
-        StructField("timestamp",StringType(), True),
         StructField("Accept", StringType(), True),
         StructField("Host", StringType(), True),
         StructField("User_Agent", StringType(), True),
@@ -94,8 +90,6 @@ def asset_transactions_schema():
 def cash_transactions_schema():
     """
    root
-    |-- raw_event: string(nullable = true)
-    |-- timestamp: string(nullable = true)
     |-- Accept: string (nullable = true)
     |-- Host: string (nullable = true)
     |-- User-Agent: string (nullable = true)
@@ -105,11 +99,10 @@ def cash_transactions_schema():
     |-- Accept-Encoding: string (nullable = true)
     |-- Connection: string (nullable = true)
     |-- Content-Type: string(nullable = true)
+    |-- timestamp: string(nullable = true)
        
     """
     return StructType([
-        StructField("raw_event", StringType(), True),
-        StructField("timestamp",StringType(), True),
         StructField("Accept", StringType(), True),
         StructField("Host", StringType(), True),
         StructField("User_Agent", StringType(), True),
