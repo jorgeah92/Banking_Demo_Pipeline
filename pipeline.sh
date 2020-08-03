@@ -143,3 +143,12 @@ docker-compose exec presto presto --server presto:8080 --catalog hive --schema d
 #select count(*) from asset_prices;
 
 #docker-compose down 
+
+
+#SQL Queries
+
+#show how much money user deposited / withdrew by username 
+select event_type, 
+REGEXP_EXTRACT(description, "(.*) (.*)", 1) as user_id,
+REGEXP_EXTRACT(description, "(.*) (.*)", 2) as money
+from cash_transactions
