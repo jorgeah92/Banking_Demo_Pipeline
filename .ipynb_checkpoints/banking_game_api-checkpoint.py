@@ -166,7 +166,7 @@ def get_account_info(user_id):
             accounts = json.load(file)
     if user_id in accounts: 
         return_account_event = {'event_type': 'return_account_information',
-                                'description': 'return account into for ' + user_id}
+                                'description': user_id}
         log_to_kafka('events', return_account_event)
         return jsonify(AssetValue().update_account_value(user_id))
     else: 
@@ -198,7 +198,7 @@ def open_account():
             with open(path + "accounts.json", "w") as file:
                 json.dump(accounts, file)
             open_account_event = {'event_type': 'open_account',
-                          'description': 'Opening account: ' + json_data['user_id']}
+                          'description': json_data['user_id']}
             log_to_kafka('events', open_account_event)
             return "Account Opened!\n"
 
@@ -222,7 +222,7 @@ def delete_account():
                 with open(path + "accounts.json", "w") as file:
                     json.dump(accounts, file)
                 delete_account_event = {'event_type': 'delete_account',
-                                'description': 'Deleting account: ' + json_data["user_id"]}
+                                'description': json_data["user_id"]}
                 log_to_kafka('events', delete_account_event)
                 return "Account Deleted!\n"
             else:
@@ -233,8 +233,9 @@ def delete_account():
 @app.route("/deposit/", methods = ['POST'])
 def make_a_deposit():
     
-    def log_deposit(user_id): 
-        make_deposit_event = {'event_type': 'make_deposit'}
+    def log_deposit(user_id, amount): 
+        make_deposit_event = {'event_type': 'make_deposit', 
+                              'description' : user_id + ' ' + str(amount)}
         log_to_kafka('events', make_deposit_event)
         AssetValue().update_account_value(user_id)
         return "Amount deposited!\n"
@@ -274,15 +275,16 @@ def make_a_deposit():
                             })
                 with open(path + "accounts.json", "w") as file:
                     json.dump(accounts, file)
-                return log_deposit(json_data['user_id'])
+                return log_deposit(json_data['user_id'], add_cash)
 
 
 # Withdraw money from account
 @app.route("/withdraw/", methods = ['POST'])
 def make_a_withdrawal():
     
-    def log_withdrawal(user_id): 
-        make_withdrawal_event = {'event_type': 'make_withdrawal'}
+    def log_withdrawal(user_id, amount): 
+        make_withdrawal_event = {'event_type': 'make_withdrawal', 
+                                 'description' : user_id + ' ' + str(amount)}
         log_to_kafka('events', make_withdrawal_event)
         AssetValue().update_account_value(user_id)
         return "Amount withdrawn!\n"
@@ -313,7 +315,7 @@ def make_a_withdrawal():
 
                             with open(path + "accounts.json", "w") as file:
                                 json.dump(accounts, file)
-                            return log_withdrawal(json_data['user_id'])
+                            return log_withdrawal(json_data['user_id'], withdraw_cash)
             else: 
                 return 'There is no cash to withdraw.\n'
 
@@ -352,7 +354,8 @@ def buy_an_asset():
                             'transaction_date': datetime.today().strftime("%Y-%m-%d"),
                             'current_value' : asset_total_value
                             })
-                        buy_asset_event = {'event_type': 'buy_asset'}
+                        buy_asset_event = {'event_type': 'buy_asset', 
+                                           'description' : json_data['asset_name'] + ' '  + str(asset_number_of)}
                         log_to_kafka('events', buy_asset_event)
                         with open(path + "accounts.json", "w") as file:
                                 json.dump(accounts, file)    
@@ -402,14 +405,15 @@ def sell_an_asset():
                 new_current_value = round((number_of * combine_asset['current_value'] / combine_asset['number_of']),2)
                 combine_asset['current_value'] -= new_current_value
                 combine_asset['number_of'] -= number_of
-            for c, i in enumerate(transactions): 
-                if i['asset_name'] == 'cash': 
-                    i['current_value'] += new_current_value
-                    i['original_value'] += new_current_value
-                    i['number_of'] += new_current_value
-            transactions.append(combine_asset)
-            sell_asset_event = {'event_type': 'sell_asset'}
-            log_to_kafka('events', sell_asset_event)
-            with open(path + "accounts.json", "w") as file:
-                                json.dump(accounts, file)
-            return 'Asset sold!\n'
+                for c, i in enumerate(transactions): 
+                    if i['asset_name'] == 'cash': 
+                        i['current_value'] += new_current_value
+                        i['original_value'] += new_current_value
+                        i['number_of'] += new_current_value
+                transactions.append(combine_asset)
+                sell_asset_event = {'event_type': 'sell_asset', 
+                                    'description' : json_data['asset_name'] + ' ' + str(number_of)}
+                log_to_kafka('events', sell_asset_event)
+                with open(path + "accounts.json", "w") as file:
+                                    json.dump(accounts, file)
+                return 'Asset sold!\n'

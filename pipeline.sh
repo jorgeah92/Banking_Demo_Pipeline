@@ -48,6 +48,8 @@ while true; do docker-compose exec mids ab -n 10 -T application/json  -H "Host: 
 
 #create account
 while true; do docker-compose exec mids ab -n 1 -p /w205/Project-3-w205-JHR/test_flask/json_txt_files/create_account.txt -T application/json  -H "Host: user1.comcast.com" http://localhost:5000/open_account/; sleep 1; done
+while true; do docker-compose exec mids ab -n 1 -p /w205/Project-3-w205-JHR/test_flask/json_txt_files/create_account2.txt -T application/json  -H "Host: user1.comcast.com" http://localhost:5000/open_account/; sleep 1; done
+while true; do docker-compose exec mids ab -n 1 -p /w205/Project-3-w205-JHR/test_flask/json_txt_files/create_account3.txt -T application/json  -H "Host: user1.comcast.com" http://localhost:5000/open_account/; sleep 1; done
 
 #delete account 
 while true; do docker-compose exec mids ab -n 1 -p /w205/Project-3-w205-JHR/test_flask/json_txt_files/delete_account.txt -T application/json  -H "Host: user1.comcast.com" http://localhost:5000/delete_account/; sleep 1; done

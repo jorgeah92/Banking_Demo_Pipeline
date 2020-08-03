@@ -10,18 +10,17 @@ from pyspark.sql.types import StructType, StructField, StringType, IntegerType
 def return_event_schema():
     """
     root
-    |-- raw_event: string(nullable = true)
-    |-- timestamp: string(nullable = true)
+   
+    
     |-- Accept: string (nullable = true)
     |-- Host: string (nullable = true)
     |-- User-Agent: string (nullable = true)
     |-- event_type: string (nullable = true)
     |-- description: string (nullable = true)
+    |-- timestamp: string(nullable = true)
     
     """
     return StructType([
-        StructField("raw_event", StringType(), True),
-        StructField("timestamp",StringType(), True),
         StructField("Accept", StringType(), True),
         StructField("Host", StringType(), True),
         StructField("User_Agent", StringType(), True),
@@ -33,8 +32,8 @@ def return_event_schema():
 def account_event_schema():
     """
     root
-    |-- raw_event: string(nullable = true)
-    |-- timestamp: string(nullable = true)
+    
+   
     |-- Accept: string (nullable = true)
     |-- Host: string (nullable = true)
     |-- User-Agent: string (nullable = true)
@@ -44,11 +43,10 @@ def account_event_schema():
     |-- Accept-Encoding: string (nullable = true)
     |-- Connection: string (nullable = true)
     |-- Content-Type: string(nullable = true)
+    |-- timestamp: string(nullable = true)
        
     """
     return StructType([
-        StructField("raw_event", StringType(), True),
-        StructField("timestamp",StringType(), True),
         StructField("Accept", StringType(), True),
         StructField("Host", StringType(), True),
         StructField("User_Agent", StringType(), True),
@@ -64,8 +62,7 @@ def account_event_schema():
 def asset_transactions_schema():
     """
     root
-    |-- raw_event: string(nullable = true)
-    |-- timestamp: string(nullable = true)
+   
     |-- Accept: string (nullable = true)
     |-- Host: string (nullable = true)
     |-- User-Agent: string (nullable = true)
@@ -75,11 +72,10 @@ def asset_transactions_schema():
     |-- Accept-Encoding: string (nullable = true)
     |-- Connection: string (nullable = true)
     |-- Content-Type: string(nullable = true)
+    |-- timestamp: string(nullable = true)
        
     """
     return StructType([
-        StructField("raw_event", StringType(), True),
-        StructField("timestamp",StringType(), True),
         StructField("Accept", StringType(), True),
         StructField("Host", StringType(), True),
         StructField("User_Agent", StringType(), True),
@@ -94,8 +90,6 @@ def asset_transactions_schema():
 def cash_transactions_schema():
     """
    root
-    |-- raw_event: string(nullable = true)
-    |-- timestamp: string(nullable = true)
     |-- Accept: string (nullable = true)
     |-- Host: string (nullable = true)
     |-- User-Agent: string (nullable = true)
@@ -105,11 +99,10 @@ def cash_transactions_schema():
     |-- Accept-Encoding: string (nullable = true)
     |-- Connection: string (nullable = true)
     |-- Content-Type: string(nullable = true)
+    |-- timestamp: string(nullable = true)
        
     """
     return StructType([
-        StructField("raw_event", StringType(), True),
-        StructField("timestamp",StringType(), True),
         StructField("Accept", StringType(), True),
         StructField("Host", StringType(), True),
         StructField("User_Agent", StringType(), True),
@@ -172,62 +165,62 @@ def main():
         .option("subscribe", "events") \
         .load()
 
-#     return_asset_price = raw_events \
-#         .filter(is_return_event(raw_events.value.cast('string'))) \
-#         .select(raw_events.value.cast('string').alias('raw_event'),
-#                 raw_events.timestamp.cast('string'),
-#                 from_json(raw_events.value.cast('string'),
-#                           return_event_schema()).alias('json')) \
-#         .select('raw_event', 'timestamp', 'json.*')
+    return_asset_price = raw_events \
+        .filter(is_return_event(raw_events.value.cast('string'))) \
+        .select(raw_events.value.cast('string').alias('raw_event'),
+                raw_events.timestamp.cast('string'),
+                from_json(raw_events.value.cast('string'),
+                          return_event_schema()).alias('json')) \
+        .select('raw_event', 'timestamp', 'json.*')
     
-# #     return_asset_price.printSchema()
-# #     return_asset_price.show(100)
+#     return_asset_price.printSchema()
+#     return_asset_price.show(100)
     
-#     sink1 = return_asset_price \
-#         .writeStream \
-#         .format("parquet") \
-#         .option("checkpointLocation", "/tmp/checkpoints_for_return_asset_price") \
-#         .option("path", "/tmp/return_asset_price") \
-#         .trigger(processingTime="10 seconds") \
-#         .start()
+    sink1 = return_asset_price \
+        .writeStream \
+        .format("parquet") \
+        .option("checkpointLocation", "/tmp/checkpoints_for_return_asset_price") \
+        .option("path", "/tmp/return_asset_price") \
+        .trigger(processingTime="10 seconds") \
+        .start()
 
-#     account_status = raw_events \
-#         .filter(is_account_event(raw_events.value.cast('string'))) \
-#         .select(raw_events.value.cast('string').alias('raw_event'),
-#                 raw_events.timestamp.cast('string'),
-#                 from_json(raw_events.value.cast('string'),
-#                           account_event_schema()).alias('json')) \
-#         .select('raw_event', 'timestamp', 'json.*')
+    account_status = raw_events \
+        .filter(is_account_event(raw_events.value.cast('string'))) \
+        .select(raw_events.value.cast('string').alias('raw_event'),
+                raw_events.timestamp.cast('string'),
+                from_json(raw_events.value.cast('string'),
+                          account_event_schema()).alias('json')) \
+        .select('raw_event', 'timestamp', 'json.*')
 
-# #     account_status.printSchema()
-# #     account_status.show(100)
+#     account_status.printSchema()
+#     account_status.show(100)
     
-#     sink2 = account_status \
-#         .writeStream \
-#         .format("parquet") \
-#         .option("checkpointLocation", "/tmp/checkpoints_for_account_status") \
-#         .option("path", "/tmp/account_status") \
-#         .trigger(processingTime="10 seconds") \
-#         .start()
+    sink2 = account_status \
+        .writeStream \
+        .format("parquet") \
+        .option("checkpointLocation", "/tmp/checkpoints_for_account_status") \
+        .option("path", "/tmp/account_status") \
+        .trigger(processingTime="10 seconds") \
+        .start()
        
-#     asset_transactions = raw_events \
-#         .filter(is_asset_transactions(raw_events.value.cast('string'))) \
-#         .select(raw_events.value.cast('string').alias('raw_event'),
-#                 raw_events.timestamp.cast('string'),
-#                 from_json(raw_events.value.cast('string'),
-#                           asset_transactions_schema()).alias('json')) \
-#         .select('raw_event', 'timestamp', 'json.*')
+    asset_transactions = raw_events \
+        .filter(is_asset_transactions(raw_events.value.cast('string'))) \
+        .select(raw_events.value.cast('string').alias('raw_event'),
+                raw_events.timestamp.cast('string'),
+                from_json(raw_events.value.cast('string'),
+                          asset_transactions_schema()).alias('json')) \
+        .select('raw_event', 'timestamp', 'json.*')
 
-# #     asset_transactions.printSchema()
-# #     asset_transactions.show(100)
+#     asset_transactions.printSchema()
+#     asset_transactions.show(100)
     
-#     sink3 = asset_transactions \
-#         .writeStream \
-#         .format("parquet") \
-#         .option("checkpointLocation", "/tmp/checkpoints_for_asset_transactions") \
-#         .option("path", "/tmp/asset_transactions") \
-#         .trigger(processingTime="10 seconds") \
-#         .start()
+    sink3 = asset_transactions \
+        .writeStream \
+        .format("parquet") \
+        .option("checkpointLocation", "/tmp/checkpoints_for_asset_transactions") \
+        .option("path", "/tmp/asset_transactions") \
+        .trigger(processingTime="10 seconds") \
+        .start()
 
       
     cash_transactions = raw_events \
@@ -250,9 +243,9 @@ def main():
         .start()
 
    
-#     sink1.awaitTermination()
-#     sink2.awaitTermination()
-#     sink3.awaitTermination()
+    sink1.awaitTermination()
+    sink2.awaitTermination()
+    sink3.awaitTermination()
     sink4.awaitTermination()
     
 
