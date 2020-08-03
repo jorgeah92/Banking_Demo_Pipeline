@@ -135,6 +135,7 @@ create external table if not exists default.cash_transactions(
 
  
 #presto
+docker-compose exec presto presto --server presto:8080 --catalog hive --schema default
 # show tables;
 # describe <table name>;
 #select count(*) from asset_prices;
