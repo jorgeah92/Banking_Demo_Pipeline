@@ -53,37 +53,49 @@ while true; do docker-compose exec mids ab -n 1 -p /w205/Project-3-w205-JHR/test
 
 #delete account 
 while true; do docker-compose exec mids ab -n 1 -p /w205/Project-3-w205-JHR/test_flask/json_txt_files/delete_account.txt -T application/json  -H "Host: user1.comcast.com" http://localhost:5000/delete_account/; sleep 1; done
+while true; do docker-compose exec mids ab -n 1 -p /w205/Project-3-w205-JHR/test_flask/json_txt_files/delete_account2.txt -T application/json  -H "Host: user1.comcast.com" http://localhost:5000/delete_account/; sleep 1; done
+while true; do docker-compose exec mids ab -n 1 -p /w205/Project-3-w205-JHR/test_flask/json_txt_files/delete_account3.txt -T application/json  -H "Host: user1.comcast.com" http://localhost:5000/delete_account/; sleep 1; done
 
 #deposit account
 while true; do docker-compose exec mids ab -n 1 -p /w205/Project-3-w205-JHR/test_flask/json_txt_files/deposit_amount.txt -T application/json  -H "Host: user1.comcast.com" http://localhost:5000/deposit/; sleep 1; done
+while true; do docker-compose exec mids ab -n 1 -p /w205/Project-3-w205-JHR/test_flask/json_txt_files/deposit_amount2.txt -T application/json  -H "Host: user1.comcast.com" http://localhost:5000/deposit/; sleep 1; done
+while true; do docker-compose exec mids ab -n 1 -p /w205/Project-3-w205-JHR/test_flask/json_txt_files/deposit_amount3.txt -T application/json  -H "Host: user1.comcast.com" http://localhost:5000/deposit/; sleep 1; done
 
 #withdraw account
 while true; do docker-compose exec mids ab -n 1 -p /w205/Project-3-w205-JHR/test_flask/json_txt_files/withdraw_amount.txt -T application/json  -H "Host: user1.comcast.com" http://localhost:5000/withdraw/; sleep 1; done
+while true; do docker-compose exec mids ab -n 1 -p /w205/Project-3-w205-JHR/test_flask/json_txt_files/withdraw_amount2.txt -T application/json  -H "Host: user1.comcast.com" http://localhost:5000/withdraw/; sleep 1; done
+while true; do docker-compose exec mids ab -n 1 -p /w205/Project-3-w205-JHR/test_flask/json_txt_files/withdraw_amount3.txt -T application/json  -H "Host: user1.comcast.com" http://localhost:5000/withdraw/; sleep 1; done
 
 #buy asset
 while true; do docker-compose exec mids ab -n 1 -p /w205/Project-3-w205-JHR/test_flask/json_txt_files/buy_asset.txt -T application/json  -H "Host: user1.comcast.com" http://localhost:5000/buy_asset/; sleep 1; done
+while true; do docker-compose exec mids ab -n 1 -p /w205/Project-3-w205-JHR/test_flask/json_txt_files/buy_asset2.txt -T application/json  -H "Host: user1.comcast.com" http://localhost:5000/buy_asset/; sleep 1; done
+while true; do docker-compose exec mids ab -n 1 -p /w205/Project-3-w205-JHR/test_flask/json_txt_files/buy_asset3.txt -T application/json  -H "Host: user1.comcast.com" http://localhost:5000/buy_asset/; sleep 1; done
 
 #sell asset
 while true; do docker-compose exec mids ab -n 1 -p /w205/Project-3-w205-JHR/test_flask/json_txt_files/sell_asset.txt -T application/json  -H "Host: user1.comcast.com" http://localhost:5000/sell_asset/; sleep 1; done
+while true; do docker-compose exec mids ab -n 1 -p /w205/Project-3-w205-JHR/test_flask/json_txt_files/sell_asset2.txt -T application/json  -H "Host: user1.comcast.com" http://localhost:5000/sell_asset/; sleep 1; done
+while true; do docker-compose exec mids ab -n 1 -p /w205/Project-3-w205-JHR/test_flask/json_txt_files/sell_asset3.txt -T application/json  -H "Host: user1.comcast.com" http://localhost:5000/sell_asset/; sleep 1; done
 
 #Hive
 docker-compose exec cloudera hive
 
 #Presto
 create external table if not exists default.asset_prices (
+    raw_event string,
+    timestamp string,
     Accept string,
     Host string,
     User_Agent string,
     event_type string,
-    description string,
-    timestamp string,
-    raw_event string
+    description string
   )
   stored as parquet 
   location '/tmp/return_asset_price'
   tblproperties ("parquet.compress"="SNAPPY");
   
 create external table if not exists default.account_status (
+    raw_event string,
+    timestamp string,
     Accept string,
     Host string,
     User_Agent string,
@@ -92,16 +104,15 @@ create external table if not exists default.account_status (
     Content_Length INT,
     Accept_Encoding string,
     Connection string,
-    Content_Type string,
-    timestamp string,
-    raw_event string
-    
+    Content_Type string 
   )
   stored as parquet 
   location '/tmp/account_status'
   tblproperties ("parquet.compress"="SNAPPY");
   
 create external table if not exists default.asset_transactions(
+    raw_event string,
+    timestamp string,
     Accept string,
     Host string,
     User_Agent string,
@@ -110,15 +121,15 @@ create external table if not exists default.asset_transactions(
     Content_Length INT,
     Accept_Encoding string,
     Connection string,
-    Content_Type string,
-    timestamp string,
-    raw_event string    
+    Content_Type string   
 )
   stored as parquet 
   location '/tmp/asset_transactions'
   tblproperties ("parquet.compress"="SNAPPY");
 
 create external table if not exists default.cash_transactions( 
+    raw_event string,
+    timestamp string,
     Accept string,
     Host string,
     User_Agent string,
@@ -127,9 +138,7 @@ create external table if not exists default.cash_transactions(
     Content_Length INT,
     Accept_Encoding string,
     Connection string,
-    Content_Type string,
-    timestamp string,
-    raw_event string
+    Content_Type string
   )
   stored as parquet 
   location '/tmp/cash_transactions'

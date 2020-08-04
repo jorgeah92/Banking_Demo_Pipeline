@@ -1,0 +1,1 @@
+{"user_id": "jorgeh", "number_of": "10", "asset_name": "stock_a"}
