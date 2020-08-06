@@ -4,7 +4,12 @@ The aim of our pipeline is to create a docker container through which we want to
 
 Kafka will serve as the queue in order to read / stream the messages into our stream ingestion service, Spark. We chose Spark because of its rapid  lazy evaluation properties, which are only enhanced by the optimization of SQL. Spark with filter/flatten/transform these events and write them to storage- Hadoop. Here, we use Cloudera, the most popular distribution of Hadoop. 
 
-Since we are using multiple services, we will use a yaml file to spin up a cluster that came with Kafka, Cloudera, Zookeeper, Spark and MIDS (an open-source container created on docker hub). We had to connect the required services via ports (which expose the service to the host and allow connections amongst services). This ultimately creates a spark stack with kafka and HDFS. We also had to add volumes to the yaml file; this ensures changes made inside a docker container to our folder (here /205/w205) in the host machine. 
+Since we are using multiple services, we will use a yaml file to spin up a cluster that came with Kafka, Cloudera, Zookeeper, Spark and MIDS (an open-source container created on docker hub). We had to connect the required services via ports (which expose the service to the host and allow connections amongst services). This ultimately creates a spark stack with kafka and HDFS. We also had to add volumes to the yaml file; this ensures changes made inside a docker container to our folder (here w205) in the host machine. 
+
+
+```shell 
+mkdir w205
+```
 
 Spin up the pipeline and allow it to run in the background using -d tag: 
 
