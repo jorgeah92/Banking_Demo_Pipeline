@@ -74,3 +74,15 @@ Splits: 62 total, 56 done (90.32%)
 0:04 [376 rows, 133KB] [98 rows/s, 34.8KB/s]
 
 It seems that the number of accounts created and deleted are roughly the same which means that we are not retaining users and would need to conduct research to address this serious issue.
+
+
+#### How much money did each user deposit / withdraw by username? 
+
+A query such as the one below can also be written in Hue to generate the data. 
+
+```sql 
+select event_type, 
+REGEXP_EXTRACT(description, "(.*) (.*)", 1) as user_id,
+REGEXP_EXTRACT(description, "(.*) (.*)", 2) as money
+from cash_transactions
+```

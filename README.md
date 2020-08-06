@@ -12,4 +12,4 @@ This repo is composed of several files used to build our pipeline for transferin
 7. /test_flask folder - A folder that contains several json that are needed to run Apache Bench commands with the flask application
 8. Business_analytics.md - A short report that verifies the construction of the database through several queries conducted in presto
 9. Sparkjob.md - A document that describes the spark job (writestream_events.py) in more detail
-10. 
+10. Pipeline.md - A document that describes the entire pipeline (commands in pipeline.sh).
