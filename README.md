@@ -1,4 +1,4 @@
-# Project-3-w205-JHR
+# Banking Demo API Pipeline
 w205 project 3 repo for Jing, Hernandez, and Raju
 
 This repo is composed of several files used to build our pipeline for transfering information from a web application to databased storage in HDFS to be used with presto.
