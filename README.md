@@ -3,8 +3,7 @@ w205 project 3 repo for Jing, Hernandez, and Raju
 
 **A demo web application that mimics a simple banking interface built using Docker. The banking interface was built in Python using Flask for web calls. Each time a call is made by the user a event is created and sent through a pipeline to its ultimate destination of HDFS for storage. The events messages are queued with Kafka in order to be streamed to Spark, as an ingestion service. Spark is used to filter, flatten, and transform the streamed information to better suit storage in HDFS. Docker-compose and a yaml file was used for spinning up the Docker cluster as well as connecting all the individual programs. Cloudera was the version of HDFS used for this project and Zookeeper was used as the broker for Kafka. Presto was ran in the cluster as well so that SQL queries can be ran from the generated data of the banking application.**
 
-
-
+<br/>
 This repo is composed of several files used to build our pipeline for transfering information from a web application to databased storage in HDFS to be used with presto.
 
 1. banking_game_api.py - This is a flask application written as a python script that allows a user to call commands through a web address.
